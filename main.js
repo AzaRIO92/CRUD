@@ -17,30 +17,49 @@ const setDataLS = newData => {
 };
 
 setDataLS();
+function isValidEmail(email) {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return emailRegex.test(email);
+}
+
+function isValidUrl(url) {
+    try {
+        new URL(url);
+        return true;
+    } catch (error) {
+        return false;
+    }
+}
 
 const setData = () => {
-    if (
-        !inpName.value.trim("") ||
-        !inpPhoneNumber.value.trim("") ||
-        !inpEmail.value.trim("") ||
-        !inpImageUrl.value.trim("")
-    ) {
-        alert("Ошибка: Заполните все поля");
+    const name = inpName.value.trim();
+    const phone = inpPhoneNumber.value.trim();
+    const email = inpEmail.value.trim();
+    const imageUrl = inpImageUrl.value.trim();
+
+    if (!name || !phone || !email || !imageUrl) {
+        alert('Ошибка: Заполните все поля');
         return;
-    } else {
-        const newData = {
-            name: inpName.value,
-            phone: inpPhoneNumber.value,
-            email: inpEmail.value,
-            imageUrl: inpImageUrl.value,
-        };
-        setDataLS(newData);
-        getDataLS();
-        inpName.value = '';
-        inpPhoneNumber.value = '';
-        inpEmail.value = '';
-        inpImageUrl.value = '';
+    } else if (!isValidEmail(email)) {
+        alert('Ошибка: Введите корректный Email');
+        return;
+    } else if (!isValidUrl(imageUrl)) {
+        alert('Ошибка: Введите корректный URL');
+        return;
     }
+
+    const newData = {
+        name,
+        phone,
+        email,
+        imageUrl,
+    };
+    setDataLS(newData);
+    getDataLS();
+    inpName.value = '';
+    inpPhoneNumber.value = '';
+    inpEmail.value = '';
+    inpImageUrl.value = '';
 };
 
 formData.addEventListener("click", setData);
